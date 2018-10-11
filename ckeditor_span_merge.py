@@ -21,8 +21,19 @@ def span_scan(span, level=0):
 
 def ckeditor_span_merge(html_snippet):
     soup = BeautifulSoup(html_snippet, "html.parser")
-    for tag in soup.find_all("span", recursive=False):
-        all_styles = span_scan(tag)
-        tag.attrs['style'] = all_styles
+    working_html = html_snippet
+    len_html = len(working_html)
+    restart = True
+    while restart is True:
+        restart = False
+        for tag in soup.find_all("span"):
+            all_styles = span_scan(tag)
+            tag.attrs['style'] = all_styles
+
+            working_html = str(soup)
+            if len(working_html) < len_html:
+                len_html = len(working_html)
+                restart = True
+                break
 
     return str(soup)
