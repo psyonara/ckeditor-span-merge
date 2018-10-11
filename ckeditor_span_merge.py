@@ -28,7 +28,9 @@ def ckeditor_span_merge(html_snippet):
         restart = False
         for tag in soup.find_all("span"):
             all_styles = span_scan(tag)
-            tag.attrs['style'] = all_styles
+            tag.attrs['style'] = ";".join(
+                [style for style in list(set(all_styles.split(";"))) if style]
+            )
 
             working_html = str(soup)
             if len(working_html) < len_html:
@@ -36,4 +38,4 @@ def ckeditor_span_merge(html_snippet):
                 restart = True
                 break
 
-    return str(soup)
+    return soup.decode(formatter="html").strip("\n")
